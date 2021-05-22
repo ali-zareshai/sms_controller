@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape>
+
+            <solid
+                android:color="@color/white" />
+
+            <corners android:radius="5dp" />
+
+            <padding
+                android:top="2dp"
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"/>
+            <stroke
+                android:width="3dp"
+                android:color="@color/r800" />
+        </shape>
+    </item>
+    <!-- spinner_ab_default_new_theme_bs -> this image for corner triangle -->
+    <item>
+        <shape>
+            <solid
+                android:color="@color/r00">
+            </solid>
+
+            <corners android:radius="5dp" />
+            <padding
+                android:top="2dp"
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"/>
+            <stroke
+                android:width="2dp"
+                android:color="@color/r500"/>
+        </shape>
+    </item>
+</selector>

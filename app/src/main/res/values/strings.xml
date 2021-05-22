@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Sms Control</string>
+    <string name="device_phone_number">شماره تلفن دستگاه(09…)</string>
+    <string name="on_off_device">خاموش/ روشن:</string>
+</resources>
