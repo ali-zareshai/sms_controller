@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.telephony.SmsManager
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -14,8 +15,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bita.smscontrol.R
+import com.bita.smscontrol.Utility.SaveItem
+import com.bita.smscontrol.event.NewSms
 import com.suke.widget.SwitchButton
 import com.valdesekamdem.library.mdtoast.MDToast
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity(),View.OnClickListener {
@@ -64,6 +70,49 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         
         sendBtn?.setOnClickListener(this)
         reportBtn?.setOnClickListener(this)
+
+        //set default device phone number
+        devicePhoneNumberEdit?.setText(SaveItem.getItem(this,SaveItem.DEVICE_PHONE,""))
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public fun onEvent(sms: NewSms){
+        val parameters: MutableMap<String, String> = mutableMapOf<String, String>()
+        try{
+            for(parts in sms.sms.split(",")){
+                val part =parts.split("=")
+                parameters.put(part.get(0),part.get(1))
+            }
+            setResultSms(parameters)
+        }catch (e:Exception){
+            Log.e("exception:",e.message)
+        }
+
+    }
+
+    private fun setResultSms(parameters: MutableMap<String, String>) {
+        onTimeEdit?.setText(parameters["on_time"])
+        offTimeEdit?.setText(parameters["off_time"])
+        delayConEdit?.setText(parameters["delay_start"])
+        delayDisEdit?.setText(parameters["off_delay"])
+        maxAmpherEdit?.setText(parameters["over_amp"])
+        minAmpherEdit?.setText(parameters["under_amp"])
+        onTimeAmpherEdit?.setText(parameters["normal_amp"])
+        ////////////////////////
+        onTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
+        offTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
+        delayConEdit?.setBackgroundResource(R.drawable.border_edittext_success)
+        delayDisEdit?.setBackgroundResource(R.drawable.border_edittext_success)
+        maxAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
+        minAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
+        onTimeAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
     private fun requestSmsPermission(permission: String) {
@@ -100,7 +149,13 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     private fun getReport() {
-        TODO("Not yet implemented")
+        val devicePhoneNumber =devicePhoneNumberEdit?.text.toString()
+        if(devicePhoneNumber.isEmpty() || !Regex("09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}").containsMatchIn(devicePhoneNumber)){
+            devicePhoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_error)
+            MDToast.makeText(this,getString(R.string.not_valid_phone_number),MDToast.LENGTH_LONG,MDToast.TYPE_ERROR).show()
+            return
+        }
+        sendSMS(devicePhoneNumber,"report")
     }
 
     private fun sendParameters() {
@@ -118,6 +173,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                     "*${delayDisEdit?.text.toString()}*${maxAmpherEdit?.text.toString()}*${minAmpherEdit?.text.toString()}*${phoneNumberEdit?.text.toString()}*"
 
             showWaringDialog(devicePhoneNumberEdit?.text.toString(), message)
+            SaveItem.setItem(this,SaveItem.DEVICE_PHONE,devicePhoneNumberEdit?.text.toString())
         }
 
     }
