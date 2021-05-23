@@ -75,7 +75,7 @@
                             android:textSize="18sp"
                             android:padding="5dp"
                             android:textColor="@color/black"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentLeft="true"
                             android:textStyle="bold"
                             android:text="@string/off"/>
 
@@ -91,7 +91,7 @@
                             android:textSize="18sp"
                             android:padding="5dp"
                             android:textColor="@color/black"
-                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentRight="true"
                             android:textStyle="bold"
                             android:text="@string/on"/>
                     </RelativeLayout>
@@ -109,7 +109,7 @@
                             android:textSize="18sp"
                             android:padding="5dp"
                             android:textColor="@color/black"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentLeft="true"
                             android:textStyle="bold"
                             android:text="@string/manual_timer"/>
 
@@ -125,7 +125,7 @@
                             android:textSize="18sp"
                             android:padding="5dp"
                             android:textColor="@color/black"
-                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentRight="true"
                             android:textStyle="bold"
                             android:text="@string/active_timer"/>
                     </RelativeLayout>
