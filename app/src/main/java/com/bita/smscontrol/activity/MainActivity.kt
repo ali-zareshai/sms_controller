@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     var minAmpherEdit:EditText?=null
     var onTimeAmpherEdit:EditText?=null
     var phoneNumberEdit:EditText?=null
+    var statusTv:TextView?=null
 
     var sendBtn:Button?=null
     var reportBtn:Button?=null
@@ -64,6 +66,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         minAmpherEdit =findViewById(R.id.edit_min_ampher)
         onTimeAmpherEdit =findViewById(R.id.edit_ontime_ampher)
         phoneNumberEdit =findViewById(R.id.edit_phone_number)
+        statusTv =findViewById(R.id.status_device_tv)
 
         sendBtn =findViewById(R.id.btn_send)
         reportBtn =findViewById(R.id.btn_report)
@@ -118,6 +121,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         maxAmpherEdit?.setText(parameters["over_amp"])
         minAmpherEdit?.setText(parameters["under_amp"])
         onTimeAmpherEdit?.setText(parameters["normal_amp"])
+        setStatusName(parameters["status_trip"])
         ////////////////////////
         onTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
         offTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
@@ -126,6 +130,16 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         maxAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
         minAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
         onTimeAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
+    }
+
+    private fun setStatusName(code: String?) {
+        when(code?.toInt()){
+            0->statusTv?.text =getString(R.string.off)
+            1->statusTv?.text =getString(R.string.on_by_timer)
+            2->statusTv?.text =getString(R.string.manual_by_timer)
+            3->statusTv?.text =getString(R.string.over_amp)
+            4->statusTv?.text =getString(R.string.under_amp)
+        }
     }
 
     override fun onDestroy() {

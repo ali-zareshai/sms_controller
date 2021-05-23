@@ -24,4 +24,9 @@
     <string name="yes_send">بله و ارسال …</string>
     <string name="no">خیر</string>
     <string name="sending">در حال ارسال …</string>
+    <string name="status">وضعیت:</string>
+    <string name="on_by_timer">روشن با تایمر</string>
+    <string name="manual_by_timer">روشن دستی</string>
+    <string name="over_amp">جریان زیاد</string>
+    <string name="under_amp">جریان کم</string>
 </resources>
