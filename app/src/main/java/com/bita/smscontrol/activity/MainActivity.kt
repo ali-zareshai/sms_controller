@@ -67,7 +67,25 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
         sendBtn =findViewById(R.id.btn_send)
         reportBtn =findViewById(R.id.btn_report)
-        
+
+        offSwitche?.setOnCheckedChangeListener(object:SwitchButton.OnCheckedChangeListener{
+            override fun onCheckedChanged(view: SwitchButton?, isChecked: Boolean) {
+                if (isChecked){
+                    sendCommand("on")
+                }else{
+                    sendCommand("off")
+                }
+            }
+        });
+        timerSwitch?.setOnCheckedChangeListener(object :SwitchButton.OnCheckedChangeListener{
+            override fun onCheckedChanged(view: SwitchButton?, isChecked: Boolean) {
+                if(isChecked){
+                    sendCommand("on_timer")
+                }else{
+                    sendCommand("on_manually")
+                }
+            }
+        })
         sendBtn?.setOnClickListener(this)
         reportBtn?.setOnClickListener(this)
 
@@ -144,18 +162,18 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     override fun onClick(p0: View?) {
         when(p0){
             sendBtn -> sendParameters()
-            reportBtn -> getReport()
+            reportBtn -> sendCommand("reporte")
         }
     }
 
-    private fun getReport() {
+    private fun sendCommand(cmd:String) {
         val devicePhoneNumber =devicePhoneNumberEdit?.text.toString()
         if(devicePhoneNumber.isEmpty() || !Regex("09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}").containsMatchIn(devicePhoneNumber)){
             devicePhoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_error)
             MDToast.makeText(this,getString(R.string.not_valid_phone_number),MDToast.LENGTH_LONG,MDToast.TYPE_ERROR).show()
             return
         }
-        sendSMS(devicePhoneNumber,"report")
+        sendSMS(devicePhoneNumber,"reporte")
     }
 
     private fun sendParameters() {
