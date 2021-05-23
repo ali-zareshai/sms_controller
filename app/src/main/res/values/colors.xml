@@ -21,4 +21,9 @@
     <color name="green500">#4CAF50</color>
     <color name="green800">#2E7D32</color>
     <color name="green100">#E8F5E9</color>
+    <color name="blue500">#2196F3</color>
+    <color name="blue800">#1565C0</color>
+    <color name="g800">#424242</color>
+    <color name="g500">#9E9E9E</color>
+    <color name="g700">#616161</color>
 </resources>

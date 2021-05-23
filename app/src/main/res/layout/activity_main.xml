@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,11 +11,11 @@
         android:orientation="vertical">
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="70dp"
         android:elevation="5dp"
         android:layout_alignParentTop="true"
         android:id="@+id/main_toolbar"
-        android:background="@color/colorPrimaryDark">
+        android:background="@color/g700">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -39,11 +39,12 @@
             android:layout_height="wrap_content">
             <EditText
                 android:layout_width="match_parent"
+                android:id="@+id/edit_device_phone"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:background="@drawable/border_edittext_normal"
                 android:layout_margin="10dp"
-                android:padding="10dp"
+                android:padding="15dp"
                 android:hint="@string/device_phone_number"
                 android:inputType="number"
                 android:textStyle="bold"
@@ -65,10 +66,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:layoutDirection="rtl">
+                        android:layoutDirection="rtl"
+                        android:layout_marginBottom="5dp">
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textDirection="rtl"
                             android:textSize="18sp"
@@ -76,14 +77,297 @@
                             android:textColor="@color/black"
                             android:layout_alignParentRight="true"
                             android:textStyle="bold"
-                            android:text="@string/on_off_device"/>
+                            android:text="@string/off"/>
 
                         <com.suke.widget.SwitchButton
-                            android:id="@+id/switch_button"
-                            android:layout_alignParentLeft="true"
-                            android:layout_marginLeft="0dp"
+                            android:id="@+id/switch_off_button"
+                            android:layout_centerHorizontal="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textDirection="rtl"
+                            android:textSize="18sp"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:layout_alignParentLeft="true"
+                            android:textStyle="bold"
+                            android:text="@string/on"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:layoutDirection="rtl"
+                        android:layout_marginBottom="5dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textDirection="rtl"
+                            android:textSize="18sp"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:layout_alignParentRight="true"
+                            android:textStyle="bold"
+                            android:text="@string/manual_timer"/>
+
+                        <com.suke.widget.SwitchButton
+                            android:id="@+id/switch_timer_button"
+                            android:layout_centerHorizontal="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textDirection="rtl"
+                            android:textSize="18sp"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:layout_alignParentLeft="true"
+                            android:textStyle="bold"
+                            android:text="@string/active_timer"/>
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/g600"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layoutDirection="rtl"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="21sp"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/on_time"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"/>
+                        <EditText
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:padding="10dp"
+                            android:id="@+id/edit_on_time"
+                            android:layout_margin="10dp"
+                            android:maxLength="3"
+                            android:textSize="21sp"
+                            android:inputType="number"
+                            android:background="@drawable/border_edittext_normal"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layoutDirection="rtl"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="21sp"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/off_time"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"/>
+                        <EditText
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:padding="10dp"
+                            android:id="@+id/edit_off_time"
+                            android:layout_margin="10dp"
+                            android:maxLength="3"
+                            android:textSize="21sp"
+                            android:inputType="number"
+                            android:background="@drawable/border_edittext_normal"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layoutDirection="rtl"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="21sp"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/delay_connect"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"/>
+                        <EditText
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:padding="10dp"
+                            android:id="@+id/edit_delay_connect"
+                            android:layout_margin="10dp"
+                            android:maxLength="3"
+                            android:textSize="21sp"
+                            android:inputType="number"
+                            android:background="@drawable/border_edittext_normal"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layoutDirection="rtl"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="21sp"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/delay_disconnect"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"/>
+                        <EditText
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:padding="10dp"
+                            android:id="@+id/edit_disconnect_delay"
+                            android:layout_margin="10dp"
+                            android:maxLength="3"
+                            android:textSize="21sp"
+                            android:inputType="number"
+                            android:background="@drawable/border_edittext_normal"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layoutDirection="rtl"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="21sp"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/max_ampher"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"/>
+                        <EditText
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:padding="10dp"
+                            android:id="@+id/edit_max_ampher"
+                            android:layout_margin="10dp"
+                            android:maxLength="3"
+                            android:textSize="21sp"
+                            android:inputType="number"
+                            android:background="@drawable/border_edittext_normal"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layoutDirection="rtl"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="21sp"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/min_ampher"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"/>
+                        <EditText
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:padding="10dp"
+                            android:id="@+id/edit_min_ampher"
+                            android:layout_margin="10dp"
+                            android:maxLength="3"
+                            android:textSize="21sp"
+                            android:inputType="number"
+                            android:background="@drawable/border_edittext_normal"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layoutDirection="rtl"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="21sp"
+                            android:layout_alignParentRight="true"
+                            android:text="@string/ontime_ampher"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"/>
+                        <EditText
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:padding="10dp"
+                            android:id="@+id/edit_ontime_ampher"
+                            android:layout_margin="10dp"
+                            android:maxLength="3"
+                            android:textSize="21sp"
+                            android:inputType="number"
+                            android:background="@drawable/border_edittext_normal"/>
+                    </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layoutDirection="rtl"
+                        android:orientation="vertical"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="21sp"
+                            android:text="@string/phone_number"
+                            android:padding="10dp"
+                            android:layout_margin="5dp"/>
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:padding="15dp"
+                            android:id="@+id/edit_phone_number"
+                            android:layout_margin="10dp"
+                            android:maxLength="11"
+                            android:textSize="21sp"
+                            android:inputType="number"
+                            android:background="@drawable/border_edittext_normal"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/g600"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:background="@color/g100"
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:layout_alignParentLeft="true"
+                            android:id="@+id/btn_send"
+                            android:drawableRight="@drawable/ic_baseline_send_24"
+                            android:background="@drawable/button_green"
+                            android:text="@string/send"
+                            android:layout_margin="15dp"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"/>
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:layout_alignParentRight="true"
+                            android:id="@+id/btn_report"
+                            android:drawableRight="@drawable/ic_baseline_article_24"
+                            android:background="@drawable/button_blue"
+                            android:text="@string/report"
+                            android:layout_margin="15dp"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"/>
                     </RelativeLayout>
                 </LinearLayout>
             </ScrollView>
