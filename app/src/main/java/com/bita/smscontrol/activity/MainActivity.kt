@@ -159,12 +159,18 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     private fun sendSMS(phoneNumber: String, message: String){
+        try{
+            smsManager?.sendTextMessage(phoneNumber, null, message, null, null)
+        }catch (e:Exception){
+            MDToast.makeText(this,getString(R.string.reset_app),MDToast.LENGTH_LONG,MDToast.TYPE_WARNING).show();
+            finish()
+        }
         val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
         pDialog.progressHelper.barColor = Color.parseColor("#A5DC86")
         pDialog.titleText = getString(R.string.sending)
         pDialog.setCancelable(false)
         pDialog.show()
-        smsManager?.sendTextMessage(phoneNumber, null, message, null, null)
+
         Handler().postDelayed(object:Runnable{
             override fun run() {
                 pDialog.dismissWithAnimation()
@@ -187,7 +193,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             MDToast.makeText(this,getString(R.string.not_valid_phone_number),MDToast.LENGTH_LONG,MDToast.TYPE_ERROR).show()
             return
         }
-        sendSMS(devicePhoneNumber,"reporte")
+        if(cmd=="reporte")
+            sendSMS(devicePhoneNumber,"reporte")
+        else
+            sendSMS(devicePhoneNumber,"*set*${cmd}*")
     }
 
     private fun sendParameters() {

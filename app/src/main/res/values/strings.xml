@@ -29,4 +29,5 @@
     <string name="manual_by_timer">روشن دستی</string>
     <string name="over_amp">جریان زیاد</string>
     <string name="under_amp">جریان کم</string>
+    <string name="reset_app">لطفا دوباره وارد برنامه شوید</string>
 </resources>
