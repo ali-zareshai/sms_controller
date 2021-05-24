@@ -49,6 +49,7 @@
                 android:inputType="number"
                 android:textStyle="bold"
                 android:textSize="21sp"
+                android:maxLength="11"
                 android:textDirection="rtl"/>
             <View
                 android:layout_width="match_parent"
