@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
     private fun sendCommand(cmd:String) {
         val devicePhoneNumber =devicePhoneNumberEdit?.text.toString()
-        if(devicePhoneNumber.isEmpty() || !Regex("09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}").containsMatchIn(devicePhoneNumber)){
+        if(devicePhoneNumber.isEmpty() || !Regex("09[0-9]{10}").containsMatchIn(devicePhoneNumber)){
             devicePhoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_error)
             MDToast.makeText(this,getString(R.string.not_valid_phone_number),MDToast.LENGTH_LONG,MDToast.TYPE_ERROR).show()
             return
@@ -210,8 +210,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             return
         }
         if(isValidAllFields()){
-            val message:String ="*setall*${onTimeEdit?.text.toString()}*${offTimeEdit?.text.toString()}*${delayConEdit?.text.toString()}" +
-                    "*${delayDisEdit?.text.toString()}*${maxAmpherEdit?.text.toString()}*${minAmpherEdit?.text.toString()}*${phoneNumberEdit?.text.toString()}*"
+            val message:String ="setall*${onTimeEdit?.text.toString()}*${offTimeEdit?.text.toString()}*${delayConEdit?.text.toString()}" +
+                    "*${delayDisEdit?.text.toString()}*${maxAmpherEdit?.text.toString()}*${minAmpherEdit?.text.toString()}*${phoneNumberEdit?.text.toString()}"
 
             showWaringDialog(devicePhoneNumberEdit?.text.toString(), message)
             SaveItem.setItem(this,SaveItem.DEVICE_PHONE,devicePhoneNumberEdit?.text.toString())
@@ -236,7 +236,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     private fun isValidAllFields(): Boolean {
-        val mobileRegex =Regex("09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}")
+        val mobileRegex =Regex("09[0-9]{10}")
         if(!mobileRegex.containsMatchIn(devicePhoneNumberEdit?.text.toString())){
             MDToast.makeText(
                 this,
