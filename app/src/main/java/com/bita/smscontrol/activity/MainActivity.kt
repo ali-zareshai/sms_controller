@@ -196,7 +196,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         if(cmd=="reporte")
             sendSMS(devicePhoneNumber,"reporte")
         else
-            sendSMS(devicePhoneNumber,"*set*${cmd}*")
+            showWaringDialog(devicePhoneNumber,"*set*${cmd}*")
     }
 
     private fun sendParameters() {
@@ -250,7 +250,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             devicePhoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_normal)
         }
 
-        if(delayConEdit?.text.toString().toInt()>240){
+        if(delayConEdit?.text.toString().trim().toInt()>240){
             delayConEdit?.setBackgroundResource(R.drawable.border_edittext_error)
             MDToast.makeText(
                 this,
@@ -263,11 +263,11 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             delayConEdit?.setBackgroundResource(R.drawable.border_edittext_normal)
         }
 
-        if(delayDisEdit?.text.toString().toInt()>15){
+        if(delayDisEdit?.text.toString().trim().toInt()>15){
             delayDisEdit?.setBackgroundResource(R.drawable.border_edittext_error)
             MDToast.makeText(
                 this,
-                getString(R.string.low_from_240),
+                getString(R.string.low_from_15),
                 MDToast.LENGTH_LONG,
                 MDToast.TYPE_ERROR
             ).show()

@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Sms Control</string>
-    <string name="device_phone_number">شماره تلفن دستگاه</string>
+    <string name="device_number">شماره دستگاه:</string>
     <string name="off">خاموش</string>
     <string name="on">روشن</string>
-    <string name="active_timer">تایمر فعال</string>
-    <string name="manual_timer">تایمر دستی</string>
+    <string name="active_timer">تایمر</string>
+    <string name="manual_timer">دستی</string>
     <string name="on_time">زمان روشن</string>
     <string name="off_time">زمان خاموش</string>
     <string name="delay_connect">تاخیر وصل</string>
@@ -30,4 +30,5 @@
     <string name="over_amp">جریان زیاد</string>
     <string name="under_amp">جریان کم</string>
     <string name="reset_app">لطفا دوباره وارد برنامه شوید</string>
+    <string name="operator_number">شماره اپراتور</string>
 </resources>
