@@ -82,10 +82,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         sendBtn =findViewById(R.id.btn_send)
         reportBtn =findViewById(R.id.btn_report)
 
-
         offSwitche?.setOnValueChangedListener(object: ToggleButton.OnValueChangedListener{
             override fun onValueChanged(value: Int) {
                 if(enableSwitchs){
+                    clearFocus()
                     when(value) {
                         0 -> sendCommand("on_timer")
                         1 -> sendCommand("off")
@@ -159,13 +159,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         minAmpherEdit?.setText(parameters["under_amp"])
         onTimeAmpherEdit?.setText(parameters["normal_amp"])
         ////////////////////////
-        onTimeEdit?.clearFocus()
-        offTimeEdit?.clearFocus()
-        delayConEdit?.clearFocus()
-        delayDisEdit?.clearFocus()
-        maxAmpherEdit?.clearFocus()
-        minAmpherEdit?.clearFocus()
-        onTimeAmpherEdit?.clearFocus()
+        clearFocus()
         ////////////////////////
         onTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
         offTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
@@ -177,6 +171,16 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         //////
         stopTimer()
         enableSwitchs=true
+    }
+
+    private fun clearFocus(){
+        onTimeEdit?.clearFocus()
+        offTimeEdit?.clearFocus()
+        delayConEdit?.clearFocus()
+        delayDisEdit?.clearFocus()
+        maxAmpherEdit?.clearFocus()
+        minAmpherEdit?.clearFocus()
+        onTimeAmpherEdit?.clearFocus()
     }
 
     private fun setStatusName(code: String?) {
