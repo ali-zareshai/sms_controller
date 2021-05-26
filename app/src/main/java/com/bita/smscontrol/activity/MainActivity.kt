@@ -18,10 +18,11 @@ import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bita.smscontrol.R
 import com.bita.smscontrol.Utility.SaveItem
 import com.bita.smscontrol.event.NewSms
-import com.suke.widget.SwitchButton
 import com.valdesekamdem.library.mdtoast.MDToast
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import org.honorato.multistatetogglebutton.MultiStateToggleButton
+import org.honorato.multistatetogglebutton.ToggleButton
 import java.lang.Exception
 
 
@@ -29,8 +30,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     var  smsManager:SmsManager?=null
 
     var devicePhoneNumberEdit:EditText?=null;
-    var offSwitche:SwitchButton?=null
-    var timerSwitch:SwitchButton?=null
+    var offSwitche: MultiStateToggleButton?=null
     var onTimeEdit:EditText?=null
     var offTimeEdit:EditText?=null
     var delayConEdit:EditText?=null
@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
         devicePhoneNumberEdit =findViewById(R.id.edit_device_phone)
         offSwitche =findViewById(R.id.switch_off_button)
-        timerSwitch =findViewById(R.id.switch_timer_button)
         onTimeEdit =findViewById(R.id.edit_on_time)
         offTimeEdit =findViewById(R.id.edit_off_time)
         delayConEdit =findViewById(R.id.edit_delay_connect)
@@ -71,23 +70,16 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         sendBtn =findViewById(R.id.btn_send)
         reportBtn =findViewById(R.id.btn_report)
 
-        offSwitche?.setOnCheckedChangeListener(object:SwitchButton.OnCheckedChangeListener{
-            override fun onCheckedChanged(view: SwitchButton?, isChecked: Boolean) {
-                if (isChecked){
-                    sendCommand("on")
-                }else{
-                    sendCommand("off")
+
+        offSwitche?.setOnValueChangedListener(object: ToggleButton.OnValueChangedListener{
+            override fun onValueChanged(value: Int) {
+                when(value){
+                    0->sendCommand("on_timer")
+                    1->sendCommand("off")
+                    2->sendCommand("on_manually")
                 }
             }
-        });
-        timerSwitch?.setOnCheckedChangeListener(object :SwitchButton.OnCheckedChangeListener{
-            override fun onCheckedChanged(view: SwitchButton?, isChecked: Boolean) {
-                if(isChecked){
-                    sendCommand("on_timer")
-                }else{
-                    sendCommand("on_manually")
-                }
-            }
+
         })
         sendBtn?.setOnClickListener(this)
         reportBtn?.setOnClickListener(this)
@@ -134,11 +126,30 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
     private fun setStatusName(code: String?) {
         when(code?.toInt()){
-            0->statusTv?.text =getString(R.string.off)
-            1->statusTv?.text =getString(R.string.on_by_timer)
-            2->statusTv?.text =getString(R.string.manual_by_timer)
-            3->statusTv?.text =getString(R.string.over_amp)
-            4->statusTv?.text =getString(R.string.under_amp)
+            0->{
+                statusTv?.text =getString(R.string.off)
+                offSwitche?.value=1
+            }
+            1->{
+                statusTv?.text =getString(R.string.on_by_timer)
+                offSwitche?.value=0
+            }
+            2->{
+                statusTv?.text =getString(R.string.manual_by_timer)
+                offSwitche?.value=2
+            }
+            3->{
+                statusTv?.text =getString(R.string.over_amp)
+                offSwitche?.value=1
+            }
+            4->{
+                statusTv?.text =getString(R.string.under_amp)
+                offSwitche?.value=1
+            }
+            5->{
+                statusTv?.text =getString(R.string.digital_disconnect)
+                offSwitche?.value=1
+            }
         }
     }
 

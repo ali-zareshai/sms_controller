@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:mstb="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.MainActivity">
     <LinearLayout
         android:layout_width="match_parent"
@@ -116,67 +116,17 @@
                         android:padding="10dp"
                         android:layoutDirection="rtl"
                         android:layout_marginBottom="5dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textDirection="rtl"
-                            android:textSize="18sp"
-                            android:padding="5dp"
-                            android:textColor="@color/black"
-                            android:layout_alignParentLeft="true"
-                            android:textStyle="bold"
-                            android:text="@string/off"/>
-
-                        <com.suke.widget.SwitchButton
+                        <org.honorato.multistatetogglebutton.MultiStateToggleButton
                             android:id="@+id/switch_off_button"
-                            android:layout_centerHorizontal="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textDirection="rtl"
-                            android:textSize="18sp"
-                            android:padding="5dp"
-                            android:textColor="@color/black"
-                            android:layout_alignParentRight="true"
-                            android:textStyle="bold"
-                            android:text="@string/on"/>
+                            android:layout_marginTop="10dip"
+                            android:layout_centerHorizontal="true"
+                            mstb:values="@array/device_status"
+                            mstb:mstbPrimaryColor="@color/green800"
+                            mstb:mstbSecondaryColor="@color/white"/>
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:layoutDirection="rtl"
-                        android:layout_marginBottom="5dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textDirection="rtl"
-                            android:textSize="18sp"
-                            android:padding="5dp"
-                            android:textColor="@color/black"
-                            android:layout_alignParentLeft="true"
-                            android:textStyle="bold"
-                            android:text="@string/manual_timer"/>
-
-                        <com.suke.widget.SwitchButton
-                            android:id="@+id/switch_timer_button"
-                            android:layout_centerHorizontal="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textDirection="rtl"
-                            android:textSize="18sp"
-                            android:padding="5dp"
-                            android:textColor="@color/black"
-                            android:layout_alignParentRight="true"
-                            android:textStyle="bold"
-                            android:text="@string/active_timer"/>
-                    </RelativeLayout>
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
