@@ -86,6 +86,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
         //set default device phone number
         devicePhoneNumberEdit?.setText(SaveItem.getItem(this,SaveItem.DEVICE_PHONE,""))
+        phoneNumberEdit?.setText(SaveItem.getItem(this,SaveItem.OPERATOR_PHONE,""))
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
     }
@@ -226,6 +227,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
             showWaringDialog(devicePhoneNumberEdit?.text.toString(), message)
             SaveItem.setItem(this,SaveItem.DEVICE_PHONE,devicePhoneNumberEdit?.text.toString())
+            SaveItem.setItem(this,SaveItem.OPERATOR_PHONE,phoneNumberEdit?.text.toString())
         }
 
     }

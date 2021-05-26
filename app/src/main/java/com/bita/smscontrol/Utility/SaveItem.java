@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 
 public class SaveItem {
     public static final String DEVICE_PHONE ="device_phone";
+    public static final String OPERATOR_PHONE ="operator_phone";
 
 
 
