@@ -7,6 +7,7 @@ import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
 import android.os.Handler
 import android.provider.Telephony
+import android.util.Log
 import androidx.core.content.ContextCompat.getSystemService
 import com.bita.smscontrol.activity.MainActivity
 import com.bita.smscontrol.event.NewSms
@@ -27,6 +28,7 @@ class SMSReceiver : BroadcastReceiver() {
                 if(isForeground(context,"com.bita.smscontrol")){
                     EventBus.getDefault().post(NewSms(SmsMessage.displayOriginatingAddress, message))
                 }else{
+                    Log.e("SMSReceiver","start main activity ........")
                     val intent = Intent(context,MainActivity::class.java)
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     context?.startActivity(intent)
@@ -34,7 +36,7 @@ class SMSReceiver : BroadcastReceiver() {
                         override fun run() {
                             EventBus.getDefault().post(NewSms(SmsMessage.displayOriginatingAddress, message))
                         }
-                    },4000);
+                    },4000)
                 }
             }
         }

@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bita.smscontrol.R
 import com.bita.smscontrol.Utility.SaveItem
+import com.bita.smscontrol.Utility.TimerTextView
 import com.bita.smscontrol.event.NewSms
 import com.valdesekamdem.library.mdtoast.MDToast
 import org.greenrobot.eventbus.EventBus
@@ -42,9 +43,15 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     var phoneNumberEdit:EditText?=null
     var statusTv:TextView?=null
     var phoneDeviceBorder:LinearLayout?=null
+    var phoneOperatorBorder:LinearLayout?=null
+    var timer:TimerTextView?=null
 
     var sendBtn:Button?=null
     var reportBtn:Button?=null
+
+    var timerHander:Handler?=null
+    var enableSwitchs:Boolean=true
+
 
     companion object {
         private const val REQUEST_CODE_SMS_PERMISSION = 1
@@ -69,6 +76,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         phoneNumberEdit =findViewById(R.id.edit_phone_number)
         statusTv =findViewById(R.id.status_device_tv)
         phoneDeviceBorder= findViewById(R.id.edit_device_phone_border)
+        phoneOperatorBorder= findViewById(R.id.edit_phone_number_lin)
+        timer =findViewById(R.id.timerText)
 
         sendBtn =findViewById(R.id.btn_send)
         reportBtn =findViewById(R.id.btn_report)
@@ -76,11 +85,14 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
         offSwitche?.setOnValueChangedListener(object: ToggleButton.OnValueChangedListener{
             override fun onValueChanged(value: Int) {
-                when(value){
-                    0->sendCommand("on_timer")
-                    1->sendCommand("off")
-                    2->sendCommand("on_manually")
+                if(enableSwitchs){
+                    when(value) {
+                        0 -> sendCommand("on_timer")
+                        1 -> sendCommand("off")
+                        2 -> sendCommand("on_manually")
+                    }
                 }
+
             }
 
         })
@@ -94,6 +106,33 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             EventBus.getDefault().register(this);
     }
 
+    private fun startTimer(){
+        sendBtn?.isEnabled =false
+        reportBtn?.isEnabled=false
+        offSwitche?.isEnabled =false
+        timer?.setEndTime(System.currentTimeMillis() + (120 * 1000))
+        timer?.visibility =View.VISIBLE
+        timerHander=Handler()
+        timerHander?.postDelayed(object:Runnable{
+            override fun run() {
+                stopTimer()
+            }
+
+        },120 * 1000)
+    }
+
+    private fun stopTimer(){
+        sendBtn?.isEnabled =true
+        reportBtn?.isEnabled=true
+        offSwitche?.isEnabled =true
+        timer?.visibility =View.GONE
+        timer?.stopTimer()
+        if(timerHander!=null){
+            timerHander?.removeCallbacksAndMessages(null)
+        }
+
+    }
+
     @Subscribe
     public fun onEvent(sms: NewSms){
         val parameters: MutableMap<String, String> = mutableMapOf<String, String>()
@@ -102,6 +141,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 val part =parts.split("=")
                 parameters.put(part.get(0),part.get(1))
             }
+            enableSwitchs=false
             setResultSms(parameters)
         }catch (e:Exception){
             Log.e("exception:",e.message)
@@ -110,6 +150,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     private fun setResultSms(parameters: MutableMap<String, String>) {
+        setStatusName(parameters["status_trip"])
         onTimeEdit?.setText(parameters["on_time"])
         offTimeEdit?.setText(parameters["off_time"])
         delayConEdit?.setText(parameters["delay_start"])
@@ -117,7 +158,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         maxAmpherEdit?.setText(parameters["over_amp"])
         minAmpherEdit?.setText(parameters["under_amp"])
         onTimeAmpherEdit?.setText(parameters["normal_amp"])
-        setStatusName(parameters["status_trip"])
         ////////////////////////
         onTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
         offTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
@@ -126,6 +166,9 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         maxAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
         minAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
         onTimeAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
+        //////
+        stopTimer()
+        enableSwitchs=true
     }
 
     private fun setStatusName(code: String?) {
@@ -190,7 +233,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             override fun run() {
                 pDialog.dismissWithAnimation()
             }
-        },10000);
+        },10000)
 
     }
 
@@ -209,10 +252,13 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             return
         }
         phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_normal)
-        if(cmd=="reporte")
+        if(cmd=="reporte"){
             sendSMS(devicePhoneNumber,"reporte")
-        else
+            startTimer()
+        }else{
             showWaringDialog(devicePhoneNumber,"*set*${cmd}*")
+        }
+
     }
 
     private fun sendParameters() {
@@ -232,6 +278,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             showWaringDialog(devicePhoneNumberEdit?.text.toString(), message)
             SaveItem.setItem(this,SaveItem.DEVICE_PHONE,devicePhoneNumberEdit?.text.toString())
             SaveItem.setItem(this,SaveItem.OPERATOR_PHONE,phoneNumberEdit?.text.toString())
+
         }
 
     }
@@ -246,6 +293,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 override fun onClick(sweetAlertDialog: SweetAlertDialog?) {
                     sendSMS(phoneNumber, message)
                     sweetAlertDialog?.dismissWithAnimation()
+                    if(message.startsWith("setall"))
+                        startTimer()
                 }
 
             })
@@ -300,10 +349,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 MDToast.LENGTH_LONG,
                 MDToast.TYPE_ERROR
             ).show()
-            phoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_error)
+            phoneOperatorBorder?.setBackgroundResource(R.drawable.border_edittext_error)
             return false;
         }else{
-            phoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_normal)
+            phoneOperatorBorder?.setBackgroundResource(R.drawable.border_edittext_normal)
         }
 
         return true
@@ -360,10 +409,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         }
 
         if(phoneNumberEdit?.text.toString().isNullOrEmpty()){
-            phoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_error)
+            phoneOperatorBorder?.setBackgroundResource(R.drawable.border_edittext_error)
             return false
         }else{
-            phoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_normal)
+            phoneOperatorBorder?.setBackgroundResource(R.drawable.border_edittext_normal)
         }
 
         return true
