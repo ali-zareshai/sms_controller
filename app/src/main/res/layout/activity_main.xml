@@ -375,7 +375,6 @@
                             android:textSize="18sp"
                             android:background="@color/g200"
                             android:textColor="@color/black"
-                            android:layout_alignParentLeft="true"
                             android:text="@string/operator_number"/>
                         <EditText
                             android:layout_width="match_parent"
