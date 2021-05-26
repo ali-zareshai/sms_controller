@@ -159,6 +159,14 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         minAmpherEdit?.setText(parameters["under_amp"])
         onTimeAmpherEdit?.setText(parameters["normal_amp"])
         ////////////////////////
+        onTimeEdit?.clearFocus()
+        offTimeEdit?.clearFocus()
+        delayConEdit?.clearFocus()
+        delayDisEdit?.clearFocus()
+        maxAmpherEdit?.clearFocus()
+        minAmpherEdit?.clearFocus()
+        onTimeAmpherEdit?.clearFocus()
+        ////////////////////////
         onTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
         offTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
         delayConEdit?.setBackgroundResource(R.drawable.border_edittext_success)
