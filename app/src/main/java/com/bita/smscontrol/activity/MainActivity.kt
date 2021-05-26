@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     var onTimeAmpherEdit:EditText?=null
     var phoneNumberEdit:EditText?=null
     var statusTv:TextView?=null
+    var phoneDeviceBorder:LinearLayout?=null
 
     var sendBtn:Button?=null
     var reportBtn:Button?=null
@@ -66,6 +68,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         onTimeAmpherEdit =findViewById(R.id.edit_ontime_ampher)
         phoneNumberEdit =findViewById(R.id.edit_phone_number)
         statusTv =findViewById(R.id.status_device_tv)
+        phoneDeviceBorder= findViewById(R.id.edit_device_phone_border)
 
         sendBtn =findViewById(R.id.btn_send)
         reportBtn =findViewById(R.id.btn_report)
@@ -201,10 +204,11 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     private fun sendCommand(cmd:String) {
         val devicePhoneNumber =devicePhoneNumberEdit?.text.toString()
         if(devicePhoneNumber.isEmpty() || !Regex("09[0-9]{9}").containsMatchIn(devicePhoneNumber)){
-            devicePhoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_error)
+            phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_error)
             MDToast.makeText(this,getString(R.string.not_valid_phone_number),MDToast.LENGTH_LONG,MDToast.TYPE_ERROR).show()
             return
         }
+        phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_normal)
         if(cmd=="reporte")
             sendSMS(devicePhoneNumber,"reporte")
         else
@@ -257,10 +261,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 MDToast.LENGTH_LONG,
                 MDToast.TYPE_ERROR
             ).show()
-            devicePhoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_error)
+            phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_error)
             return false;
         }else{
-            devicePhoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_normal)
+            phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_normal)
         }
 
         if(delayConEdit?.text.toString().trim().toInt()>240){
@@ -307,10 +311,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
     private fun isFilledAllFields(): Boolean {
         if(devicePhoneNumberEdit?.text.toString().isNullOrEmpty()){
-            devicePhoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_error)
+            phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_error)
             return false
         }else{
-            devicePhoneNumberEdit?.setBackgroundResource(R.drawable.border_edittext_normal)
+            phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_normal)
         }
 
         if(onTimeEdit?.text.toString().isNullOrEmpty()){
