@@ -20,6 +20,39 @@
             android:layout_width="match_parent"
             android:layoutDirection="rtl"
             android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:id="@+id/has_new_sms"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_warning_24"
+                    android:padding="3dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/count_new_sms_tv"
+                    android:textColor="@color/white"
+                    android:textDirection="rtl"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textDirection="rtl"
+                    android:textStyle="bold"
+                    android:text="@string/new_sms"
+                    android:layout_marginTop="10dp"
+                    android:padding="3dp"
+                    android:textSize="20sp"/>
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"

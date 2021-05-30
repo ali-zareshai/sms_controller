@@ -32,6 +32,7 @@
     <string name="digital_disconnect">ورودی دیجیتال قطع</string>
     <string name="reset_app">لطفا دوباره وارد برنامه شوید</string>
     <string name="operator_number">شماره اپراتور</string>
+    <string name="new_sms">پیام جدید</string>
     <string-array name="device_status">
         <item>روشن با تایمر(اتوماتیک)</item>
         <item>خاموش</item>

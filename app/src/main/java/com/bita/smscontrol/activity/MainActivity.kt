@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     var statusTv:TextView?=null
     var phoneDeviceBorder:LinearLayout?=null
     var phoneOperatorBorder:LinearLayout?=null
+    var hasNewSms:LinearLayout?=null
+    var countNewSms:TextView?=null
     var timer:TimerTextView?=null
 
     var sendBtn:Button?=null
@@ -76,10 +78,14 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         statusTv =findViewById(R.id.status_device_tv)
         phoneDeviceBorder= findViewById(R.id.edit_device_phone_border)
         phoneOperatorBorder= findViewById(R.id.edit_phone_number_lin)
+        hasNewSms =findViewById(R.id.has_new_sms)
+        countNewSms =findViewById(R.id.count_new_sms_tv)
         timer =findViewById(R.id.timerText)
 
         sendBtn =findViewById(R.id.btn_send)
         reportBtn =findViewById(R.id.btn_report)
+
+        setCountNewSMS();
 
         offSwitche?.setOnValueChangedListener(object: ToggleButton.OnValueChangedListener{
             override fun onValueChanged(value: Int) {
@@ -103,6 +109,15 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         phoneNumberEdit?.setText(SaveItem.getItem(this,SaveItem.OPERATOR_PHONE,""))
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
+    }
+
+    private fun setCountNewSMS() {
+        val newSms =SaveItem.getItem(this,SaveItem.COUNT_UNREAD_SMS,"0").toInt()
+        if (newSms>0){
+            hasNewSms?.visibility =View.VISIBLE
+            countNewSms?.text ="${newSms}"
+            SaveItem.setItem(this,SaveItem.COUNT_UNREAD_SMS,"0")
+        }
     }
 
     private fun startTimer(){
