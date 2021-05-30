@@ -1,17 +1,17 @@
 <resources>
-    <string name="app_name">Sms Control</string>
+    <string name="app_name">GMC_P3</string>
     <string name="device_number">شماره دستگاه</string>
     <string name="off">خاموش</string>
     <string name="on">روشن</string>
     <string name="active_timer">تایمر</string>
     <string name="manual_timer">دستی</string>
-    <string name="on_time">زمان روشن</string>
-    <string name="off_time">زمان خاموش</string>
-    <string name="delay_connect">تاخیر وصل</string>
-    <string name="delay_disconnect">تاخیر قطع</string>
-    <string name="max_ampher">حداکثر جریان</string>
-    <string name="min_ampher">حداقل جریان</string>
-    <string name="ontime_ampher">جریان لحظه ای</string>
+    <string name="on_time">زمان روشن(دقیقه)</string>
+    <string name="off_time">زمان خاموش(دقیقه)</string>
+    <string name="delay_connect">تاخیر وصل(ثانیه)</string>
+    <string name="delay_disconnect">تاخیر قطع(ثانیه)</string>
+    <string name="max_ampher">حداکثر جریان(آمپر)</string>
+    <string name="min_ampher">حداقل جریان(آمپر)</string>
+    <string name="ontime_ampher">جریان لحظه ای(آمپر)</string>
     <string name="phone_number">شماره موبایل</string>
     <string name="report">گزارش</string>
     <string name="send">ارسال</string>

@@ -83,7 +83,7 @@ public class TimerTextView extends TextView {
                 }
                 getHandler().post(new Runnable() {
                     @Override public void run() {
-                        setText(getDurationBreakdown(endTime - System.currentTimeMillis()));
+                        setText(getDurationBreakdown(endTime - System.currentTimeMillis())+" s ");
                     }
                 });
             }
@@ -96,18 +96,10 @@ public class TimerTextView extends TextView {
     }
 
     private String getDurationBreakdown(long diff) {
-        long millis = diff;
-        if (millis < 0) {
-            return "00:00";
+        if (diff < 0) {
+            return "0";
         }
-        long hours = TimeUnit.MILLISECONDS.toHours(millis);
-        millis -= TimeUnit.HOURS.toMillis(hours);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-        millis -= TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+        return String.valueOf(diff/1000);
 
-
-        return String.format(Locale.ENGLISH, "%02d:%02d", minutes, seconds);
-        //return "${getWithLeadZero(hours)}:${getWithLeadZero(minutes)}:${getWithLeadZero(seconds)}"
     }
 }

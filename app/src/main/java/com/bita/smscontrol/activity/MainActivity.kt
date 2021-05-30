@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         sendBtn?.isEnabled =false
         reportBtn?.isEnabled=false
         offSwitche?.isEnabled =false
-        timer?.setEndTime(System.currentTimeMillis() + (120 * 1000))
+        timer?.setEndTime(System.currentTimeMillis() + (90 * 1000))
         timer?.visibility =View.VISIBLE
         timerHander=Handler()
         timerHander?.postDelayed(object:Runnable{
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 stopTimer()
             }
 
-        },120 * 1000)
+        },90 * 1000)
     }
 
     private fun stopTimer(){
@@ -302,8 +302,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 override fun onClick(sweetAlertDialog: SweetAlertDialog?) {
                     sendSMS(phoneNumber, message)
                     sweetAlertDialog?.dismissWithAnimation()
-                    if(message.startsWith("setall"))
-                        startTimer()
+                    startTimer()
                 }
 
             })
