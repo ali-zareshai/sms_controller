@@ -26,25 +26,25 @@ class SMSReceiver : BroadcastReceiver() {
             if (message.startsWith("on_time", true)){
                 if(isForeground(context, "com.bita.smscontrol")){
                     EventBus.getDefault().post(
-                        NewSms(
-                            SmsMessage.displayOriginatingAddress,
-                            message
-                        )
+                            NewSms(
+                                    SmsMessage.displayOriginatingAddress,
+                                    message
+                            )
                     )
                 }else{
                     Log.e("SMSReceiver", "start main activity ........")
                     val i = Intent()
-                    i.setClass(context!!,MainActivity::class.java)
-                    i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    context!!.startActivity(i)
+                    i.setClass(context!!, MainActivity::class.java)
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    context.startActivity(i)
 
                     Handler().postDelayed(object : Runnable {
                         override fun run() {
                             EventBus.getDefault().post(
-                                NewSms(
-                                    SmsMessage.displayOriginatingAddress,
-                                    message
-                                )
+                                    NewSms(
+                                            SmsMessage.displayOriginatingAddress,
+                                            message
+                                    )
                             )
                         }
                     }, 4000)

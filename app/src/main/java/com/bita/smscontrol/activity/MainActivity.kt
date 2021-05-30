@@ -61,8 +61,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         smsManager = SmsManager.getDefault() as SmsManager
-        requestSmsPermission(Manifest.permission.RECEIVE_SMS)
-        requestSmsPermission(Manifest.permission.SEND_SMS)
+        requestSmsPermission()
 
         devicePhoneNumberEdit =findViewById(R.id.edit_device_phone)
         offSwitche =findViewById(R.id.switch_off_button)
@@ -217,15 +216,13 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         EventBus.getDefault().unregister(this)
     }
 
-    private fun requestSmsPermission(permission: String) {
-        val grant = ContextCompat.checkSelfPermission(this, permission)
-        if (grant != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(permission),
-                REQUEST_CODE_SMS_PERMISSION
-            )
+    private fun requestSmsPermission() {
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.RECEIVE_SMS)==PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this,Manifest.permission.SEND_SMS)==PackageManager.PERMISSION_GRANTED){
+            return
         }
+
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS ,Manifest.permission.SEND_SMS), REQUEST_CODE_SMS_PERMISSION)
     }
 
     private fun sendSMS(phoneNumber: String, message: String){
