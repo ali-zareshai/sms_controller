@@ -9,6 +9,7 @@ public class SaveItem {
     public static final String DEVICE_PHONE ="device_phone";
     public static final String OPERATOR_PHONE ="operator_phone";
     public static final String COUNT_UNREAD_SMS="count_unread_sms";
+    public static final String LAST_SMS ="last_sms";
 
 
 

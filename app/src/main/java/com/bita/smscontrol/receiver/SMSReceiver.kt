@@ -1,17 +1,15 @@
 package com.bita.smscontrol.receiver
 
-import android.app.ActivityManager
-import android.app.Notification
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
-import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
-import android.os.Handler
+import android.os.Build
 import android.provider.Telephony
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.bita.smscontrol.R
 import com.bita.smscontrol.Utility.SaveItem
 import com.bita.smscontrol.activity.MainActivity
@@ -30,31 +28,16 @@ class SMSReceiver : BroadcastReceiver() {
         for (SmsMessage in extractMessages){
             val message =SmsMessage.displayMessageBody.trim()
             if (message.startsWith("on_time", true)){
-                if(isForeground(context, "com.bita.smscontrol")){
+                    counter(context = context!!)
+                    createNotification(context = context,aMessage = context.getString(R.string.new_sms))
+                    SaveItem.setItem(context,SaveItem.LAST_SMS,message)
                     EventBus.getDefault().post(
                             NewSms(
                                     SmsMessage.displayOriginatingAddress,
                                     message
                             )
                     )
-                }else{
-//                    getNotification(context!!)
-                    counter(context = context!!)
-                    val i = Intent(context, MainActivity::class.java)
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    context.startActivity(i)
 
-                    Handler().postDelayed(object : Runnable {
-                        override fun run() {
-                            EventBus.getDefault().post(
-                                    NewSms(
-                                            SmsMessage.displayOriginatingAddress,
-                                            message
-                                    )
-                            )
-                        }
-                    }, 4000)
-                }
             }
         }
     }
@@ -75,19 +58,54 @@ class SMSReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun getNotification(context: Context) {
-        val contentIntent = PendingIntent.getActivity(context, 0,
-                Intent(context, MainActivity::class.java), 0)
-
-        val mBuilder = NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle(context.getString(R.string.new_sms))
-                .setContentText("Hello World!")
-        mBuilder.setContentIntent(contentIntent)
-        mBuilder.setDefaults(Notification.DEFAULT_SOUND)
-        mBuilder.setAutoCancel(true)
-        val mNotificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        mNotificationManager.notify(13456, mBuilder.build())
+    private var notifManager: NotificationManager? = null
+    private fun createNotification(aMessage: String?, context: Context) {
+        val NOTIFY_ID = 1235
+        val id ="136810"
+        val title = "channel_01"
+        val intent: Intent
+        val pendingIntent: PendingIntent
+        val builder: NotificationCompat.Builder
+        if (notifManager == null) {
+            notifManager = context.getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            var mChannel = notifManager!!.getNotificationChannel(id)
+            if (mChannel == null) {
+                mChannel = NotificationChannel(id, title, importance)
+                mChannel.enableVibration(true)
+                mChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+                notifManager!!.createNotificationChannel(mChannel)
+            }
+            builder = NotificationCompat.Builder(context, id)
+            intent = Intent(context, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+            builder.setContentTitle(aMessage)
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setContentText(context.getString(R.string.app_name))
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setAutoCancel(false)
+                    .setContentIntent(pendingIntent)
+                    .setTicker(aMessage)
+                    .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400))
+        } else {
+            builder = NotificationCompat.Builder(context, id)
+            intent = Intent(context, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+            builder.setContentTitle(aMessage) // required
+                    .setSmallIcon(R.drawable.ic_launcher) // required
+                    .setContentText(context.getString(R.string.app_name)) // required
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setAutoCancel(false)
+                    .setContentIntent(pendingIntent)
+                    .setTicker(aMessage)
+                    .setVibrate(longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)).priority = Notification.PRIORITY_HIGH
+        }
+        val notification = builder.build()
+        notifManager!!.notify(NOTIFY_ID, notification)
     }
 
 }

@@ -1,8 +1,15 @@
 package com.bita.smscontrol.activity
 
 import android.Manifest
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.telephony.SmsManager
@@ -14,6 +21,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bita.smscontrol.R
@@ -25,7 +33,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.honorato.multistatetogglebutton.MultiStateToggleButton
 import org.honorato.multistatetogglebutton.ToggleButton
-import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity(),View.OnClickListener {
@@ -44,8 +51,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     var statusTv:TextView?=null
     var phoneDeviceBorder:LinearLayout?=null
     var phoneOperatorBorder:LinearLayout?=null
-    var hasNewSms:LinearLayout?=null
-    var countNewSms:TextView?=null
     var timer:TimerTextView?=null
 
     var sendBtn:Button?=null
@@ -78,20 +83,18 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         statusTv =findViewById(R.id.status_device_tv)
         phoneDeviceBorder= findViewById(R.id.edit_device_phone_border)
         phoneOperatorBorder= findViewById(R.id.edit_phone_number_lin)
-        hasNewSms =findViewById(R.id.has_new_sms)
-        countNewSms =findViewById(R.id.count_new_sms_tv)
         timer =findViewById(R.id.timerText)
 
         sendBtn =findViewById(R.id.btn_send)
         reportBtn =findViewById(R.id.btn_report)
 
-        setCountNewSMS();
+        setCountNewSMS()
 
-        offSwitche?.setOnValueChangedListener(object: ToggleButton.OnValueChangedListener{
+        offSwitche?.setOnValueChangedListener(object : ToggleButton.OnValueChangedListener {
             override fun onValueChanged(value: Int) {
-                if(enableSwitchs){
+                if (enableSwitchs) {
                     clearFocus()
-                    when(value) {
+                    when (value) {
                         0 -> sendCommand("on_timer")
                         1 -> sendCommand("off")
                         2 -> sendCommand("on_manually")
@@ -105,18 +108,26 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         reportBtn?.setOnClickListener(this)
 
         //set default device phone number
-        devicePhoneNumberEdit?.setText(SaveItem.getItem(this,SaveItem.DEVICE_PHONE,""))
-        phoneNumberEdit?.setText(SaveItem.getItem(this,SaveItem.OPERATOR_PHONE,""))
+        devicePhoneNumberEdit?.setText(SaveItem.getItem(this, SaveItem.DEVICE_PHONE, ""))
+        phoneNumberEdit?.setText(SaveItem.getItem(this, SaveItem.OPERATOR_PHONE, ""))
         if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
     }
 
     private fun setCountNewSMS() {
-        val newSms =SaveItem.getItem(this,SaveItem.COUNT_UNREAD_SMS,"0").toInt()
+        val newSms =SaveItem.getItem(this, SaveItem.COUNT_UNREAD_SMS, "0").toInt()
         if (newSms>0){
-            hasNewSms?.visibility =View.VISIBLE
-            countNewSms?.text ="${newSms}"
-            SaveItem.setItem(this,SaveItem.COUNT_UNREAD_SMS,"0")
+            setLastSms()
+            cancelNotify()
+            SaveItem.setItem(this, SaveItem.COUNT_UNREAD_SMS, "0")
+        }
+    }
+
+    private fun setLastSms() {
+        val lastSms =SaveItem.getItem(this,SaveItem.LAST_SMS,"")
+        if(!lastSms.equals("")){
+            onEvent(NewSms("",lastSms?:""))
+            SaveItem.setItem(this,SaveItem.LAST_SMS,"")
         }
     }
 
@@ -127,12 +138,12 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         timer?.setEndTime(System.currentTimeMillis() + (90 * 1000))
         timer?.visibility =View.VISIBLE
         timerHander=Handler()
-        timerHander?.postDelayed(object:Runnable{
+        timerHander?.postDelayed(object : Runnable {
             override fun run() {
                 stopTimer()
             }
 
-        },90 * 1000)
+        }, 90 * 1000)
     }
 
     private fun stopTimer(){
@@ -153,14 +164,19 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         try{
             for(parts in sms.sms.split(",")){
                 val part =parts.split("=")
-                parameters.put(part.get(0),part.get(1))
+                parameters.put(part.get(0), part.get(1))
             }
             enableSwitchs=false
             setResultSms(parameters)
-        }catch (e:Exception){
-            Log.e("exception:",e.message)
+        }catch (e: Exception){
+            Log.e("exception:", e.message)
         }
 
+    }
+
+    private fun cancelNotify(){
+        val notifManager = getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
+        notifManager.cancel(1235)
     }
 
     private fun setResultSms(parameters: MutableMap<String, String>) {
@@ -174,17 +190,19 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         onTimeAmpherEdit?.setText(parameters["normal_amp"])
         ////////////////////////
         clearFocus()
-        ////////////////////////
-        onTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
-        offTimeEdit?.setBackgroundResource(R.drawable.border_edittext_success)
-        delayConEdit?.setBackgroundResource(R.drawable.border_edittext_success)
-        delayDisEdit?.setBackgroundResource(R.drawable.border_edittext_success)
-        maxAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
-        minAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
-        onTimeAmpherEdit?.setBackgroundResource(R.drawable.border_edittext_success)
-        //////
+        setBackgroundEditTexts(R.drawable.border_edittext_success)
         stopTimer()
         enableSwitchs=true
+    }
+
+    private fun setBackgroundEditTexts(colorId:Int){
+        onTimeEdit?.setBackgroundResource(colorId)
+        offTimeEdit?.setBackgroundResource(colorId)
+        delayConEdit?.setBackgroundResource(colorId)
+        delayDisEdit?.setBackgroundResource(colorId)
+        maxAmpherEdit?.setBackgroundResource(colorId)
+        minAmpherEdit?.setBackgroundResource(colorId)
+        onTimeAmpherEdit?.setBackgroundResource(colorId)
     }
 
     private fun clearFocus(){
@@ -199,29 +217,29 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
     private fun setStatusName(code: String?) {
         when(code?.toInt()){
-            0->{
-                statusTv?.text =getString(R.string.off)
-                offSwitche?.value=1
+            0 -> {
+                statusTv?.text = getString(R.string.off)
+                offSwitche?.value = 1
             }
-            1->{
-                statusTv?.text =getString(R.string.on_by_timer)
-                offSwitche?.value=0
+            1 -> {
+                statusTv?.text = getString(R.string.on_by_timer)
+                offSwitche?.value = 0
             }
-            2->{
-                statusTv?.text =getString(R.string.manual_by_timer)
-                offSwitche?.value=2
+            2 -> {
+                statusTv?.text = getString(R.string.manual_by_timer)
+                offSwitche?.value = 2
             }
-            3->{
-                statusTv?.text =getString(R.string.over_amp)
-                offSwitche?.value=1
+            3 -> {
+                statusTv?.text = getString(R.string.over_amp)
+                offSwitche?.value = 1
             }
-            4->{
-                statusTv?.text =getString(R.string.under_amp)
-                offSwitche?.value=1
+            4 -> {
+                statusTv?.text = getString(R.string.under_amp)
+                offSwitche?.value = 1
             }
-            5->{
-                statusTv?.text =getString(R.string.digital_disconnect)
-                offSwitche?.value=1
+            5 -> {
+                statusTv?.text = getString(R.string.digital_disconnect)
+                offSwitche?.value = 1
             }
         }
     }
@@ -232,19 +250,19 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     private fun requestSmsPermission() {
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.RECEIVE_SMS)==PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this,Manifest.permission.SEND_SMS)==PackageManager.PERMISSION_GRANTED){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)==PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)==PackageManager.PERMISSION_GRANTED){
             return
         }
 
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS ,Manifest.permission.SEND_SMS), REQUEST_CODE_SMS_PERMISSION)
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS, Manifest.permission.SEND_SMS), REQUEST_CODE_SMS_PERMISSION)
     }
 
     private fun sendSMS(phoneNumber: String, message: String){
         try{
             smsManager?.sendTextMessage(phoneNumber, null, message, null, null)
-        }catch (e:Exception){
-            MDToast.makeText(this,getString(R.string.reset_app),MDToast.LENGTH_LONG,MDToast.TYPE_WARNING).show();
+        }catch (e: Exception){
+            MDToast.makeText(this, getString(R.string.reset_app), MDToast.LENGTH_LONG, MDToast.TYPE_WARNING).show();
             finish()
         }
         val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
@@ -253,11 +271,11 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         pDialog.setCancelable(false)
         pDialog.show()
 
-        Handler().postDelayed(object:Runnable{
+        Handler().postDelayed(object : Runnable {
             override fun run() {
                 pDialog.dismissWithAnimation()
             }
-        },10000)
+        }, 10000)
 
     }
 
@@ -268,19 +286,19 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         }
     }
 
-    private fun sendCommand(cmd:String) {
+    private fun sendCommand(cmd: String) {
         val devicePhoneNumber =devicePhoneNumberEdit?.text.toString()
         if(devicePhoneNumber.isEmpty() || !Regex("09[0-9]{9}").containsMatchIn(devicePhoneNumber)){
             phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_error)
-            MDToast.makeText(this,getString(R.string.not_valid_phone_number),MDToast.LENGTH_LONG,MDToast.TYPE_ERROR).show()
+            MDToast.makeText(this, getString(R.string.not_valid_phone_number), MDToast.LENGTH_LONG, MDToast.TYPE_ERROR).show()
             return
         }
         phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_normal)
         if(cmd=="reporte"){
-            sendSMS(devicePhoneNumber,"reporte")
+            sendSMS(devicePhoneNumber, "reporte")
             startTimer()
         }else{
-            showWaringDialog(devicePhoneNumber,"*set*${cmd}*")
+            showWaringDialog(devicePhoneNumber, "*set*${cmd}*")
         }
 
     }
@@ -288,10 +306,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     private fun sendParameters() {
         if(!isFilledAllFields()){
             MDToast.makeText(
-                this,
-                getString(R.string.fill_all_fields),
-                MDToast.LENGTH_LONG,
-                MDToast.TYPE_ERROR
+                    this,
+                    getString(R.string.fill_all_fields),
+                    MDToast.LENGTH_LONG,
+                    MDToast.TYPE_ERROR
             ).show()
             return
         }
@@ -300,8 +318,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                     "*${delayDisEdit?.text.toString()}*${maxAmpherEdit?.text.toString()}*${minAmpherEdit?.text.toString()}*${phoneNumberEdit?.text.toString()}"
 
             showWaringDialog(devicePhoneNumberEdit?.text.toString(), message)
-            SaveItem.setItem(this,SaveItem.DEVICE_PHONE,devicePhoneNumberEdit?.text.toString())
-            SaveItem.setItem(this,SaveItem.OPERATOR_PHONE,phoneNumberEdit?.text.toString())
+            SaveItem.setItem(this, SaveItem.DEVICE_PHONE, devicePhoneNumberEdit?.text.toString())
+            SaveItem.setItem(this, SaveItem.OPERATOR_PHONE, phoneNumberEdit?.text.toString())
 
         }
 
@@ -318,8 +336,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                     sendSMS(phoneNumber, message)
                     sweetAlertDialog?.dismissWithAnimation()
                     startTimer()
+                    setBackgroundEditTexts(R.drawable.border_edittext_normal)
                 }
-
             })
             .show()
     }
@@ -328,10 +346,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         val mobileRegex =Regex("09[0-9]{9}")
         if(!mobileRegex.containsMatchIn(devicePhoneNumberEdit?.text.toString())){
             MDToast.makeText(
-                this,
-                getString(R.string.not_valid_phone_number),
-                MDToast.LENGTH_LONG,
-                MDToast.TYPE_ERROR
+                    this,
+                    getString(R.string.not_valid_phone_number),
+                    MDToast.LENGTH_LONG,
+                    MDToast.TYPE_ERROR
             ).show()
             phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_error)
             return false;
@@ -342,10 +360,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         if(delayConEdit?.text.toString().trim().toInt()>240){
             delayConEdit?.setBackgroundResource(R.drawable.border_edittext_error)
             MDToast.makeText(
-                this,
-                getString(R.string.low_from_240),
-                MDToast.LENGTH_LONG,
-                MDToast.TYPE_ERROR
+                    this,
+                    getString(R.string.low_from_240),
+                    MDToast.LENGTH_LONG,
+                    MDToast.TYPE_ERROR
             ).show()
             return false
         }else{
@@ -355,10 +373,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         if(delayDisEdit?.text.toString().trim().toInt()>15){
             delayDisEdit?.setBackgroundResource(R.drawable.border_edittext_error)
             MDToast.makeText(
-                this,
-                getString(R.string.low_from_15),
-                MDToast.LENGTH_LONG,
-                MDToast.TYPE_ERROR
+                    this,
+                    getString(R.string.low_from_15),
+                    MDToast.LENGTH_LONG,
+                    MDToast.TYPE_ERROR
             ).show()
             return false
         }else{
@@ -367,10 +385,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
 
         if(!mobileRegex.containsMatchIn(phoneNumberEdit?.text.toString())){
             MDToast.makeText(
-                this,
-                getString(R.string.not_valid_phone_number),
-                MDToast.LENGTH_LONG,
-                MDToast.TYPE_ERROR
+                    this,
+                    getString(R.string.not_valid_phone_number),
+                    MDToast.LENGTH_LONG,
+                    MDToast.TYPE_ERROR
             ).show()
             phoneOperatorBorder?.setBackgroundResource(R.drawable.border_edittext_error)
             return false;
