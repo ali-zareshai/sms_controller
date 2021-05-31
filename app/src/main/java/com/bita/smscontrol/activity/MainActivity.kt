@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         val lastSms =SaveItem.getItem(this,SaveItem.LAST_SMS,"")
         if(!lastSms.equals("")){
             onEvent(NewSms("",lastSms?:""))
-            SaveItem.setItem(this,SaveItem.LAST_SMS,"")
+
         }
     }
 
@@ -168,6 +168,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             }
             enableSwitchs=false
             setResultSms(parameters)
+
         }catch (e: Exception){
             Log.e("exception:", e.message)
         }
@@ -192,6 +193,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         clearFocus()
         setBackgroundEditTexts(R.drawable.border_edittext_success)
         stopTimer()
+        SaveItem.setItem(this,SaveItem.LAST_SMS,"")
         enableSwitchs=true
     }
 
@@ -294,6 +296,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             return
         }
         phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_normal)
+        SaveItem.setItem(this, SaveItem.DEVICE_PHONE, devicePhoneNumber)
         if(cmd=="reporte"){
             sendSMS(devicePhoneNumber, "reporte")
             startTimer()

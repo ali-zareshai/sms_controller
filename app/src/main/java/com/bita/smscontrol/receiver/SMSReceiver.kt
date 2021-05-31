@@ -83,7 +83,7 @@ class SMSReceiver : BroadcastReceiver() {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
             builder.setContentTitle(aMessage)
-                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_baseline_sms_24)
                     .setContentText(context.getString(R.string.app_name))
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(false)
@@ -96,7 +96,7 @@ class SMSReceiver : BroadcastReceiver() {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
             builder.setContentTitle(aMessage) // required
-                    .setSmallIcon(R.drawable.ic_launcher) // required
+                    .setSmallIcon(R.drawable.ic_baseline_sms_24) // required
                     .setContentText(context.getString(R.string.app_name)) // required
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(false)
