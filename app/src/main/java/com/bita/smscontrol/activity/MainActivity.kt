@@ -295,6 +295,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             MDToast.makeText(this, getString(R.string.not_valid_phone_number), MDToast.LENGTH_LONG, MDToast.TYPE_ERROR).show()
             return
         }
+        setBackgroundEditTexts(R.drawable.border_edittext_normal)
         phoneDeviceBorder?.setBackgroundResource(R.drawable.border_edittext_normal)
         SaveItem.setItem(this, SaveItem.DEVICE_PHONE, devicePhoneNumber)
         if(cmd=="reporte"){
@@ -339,7 +340,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                     sendSMS(phoneNumber, message)
                     sweetAlertDialog?.dismissWithAnimation()
                     startTimer()
-                    setBackgroundEditTexts(R.drawable.border_edittext_normal)
                 }
             })
             .show()
