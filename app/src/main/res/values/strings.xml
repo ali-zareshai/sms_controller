@@ -7,6 +7,7 @@
     <string name="manual_timer">دستی</string>
     <string name="on_time">زمان روشن(دقیقه)</string>
     <string name="off_time">زمان خاموش(دقیقه)</string>
+    <string name="off_by_timer">خاموش با تایمر</string>
     <string name="delay_connect">تاخیر وصل(ثانیه)</string>
     <string name="delay_disconnect">تاخیر قطع(ثانیه)</string>
     <string name="max_ampher">حداکثر جریان(آمپر)</string>
@@ -33,8 +34,15 @@
     <string name="reset_app">لطفا دوباره وارد برنامه شوید</string>
     <string name="operator_number">شماره اپراتور</string>
     <string name="new_sms">پیام جدید از دستگاه</string>
+    <string name="operator_name">نام اپراتور</string>
+    <string name="operaor_phone_number">شماره تلفن</string>
+    <string name="confirm">تائید</string>
+    <string name="cancel">لغو</string>
+    <string name="device_names">نام دستگاه ها</string>
+    <string name="device_name">نام دستگاه</string>
+    <string name="select_1_device">یک دستگاه انتخاب کنید</string>
     <string-array name="device_status">
-        <item>روشن با تایمر(اتوماتیک)</item>
+        <item>تایمر(اتوماتیک)</item>
         <item>خاموش</item>
         <item>روشن دستی</item>
     </string-array>

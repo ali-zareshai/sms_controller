@@ -25,6 +25,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.bita.smscontrol.R
+import com.bita.smscontrol.Utility.DevicesDialog
+import com.bita.smscontrol.Utility.OperatorsDialog
 import com.bita.smscontrol.Utility.SaveItem
 import com.bita.smscontrol.Utility.TimerTextView
 import com.bita.smscontrol.event.NewSms
@@ -56,6 +58,9 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     var sendBtn:Button?=null
     var reportBtn:Button?=null
 
+    var operatorNumbers:TextView?=null
+    var deviceNumbers:TextView?=null
+
     var timerHander:Handler?=null
     var enableSwitchs:Boolean=true
 
@@ -84,6 +89,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         phoneDeviceBorder= findViewById(R.id.edit_device_phone_border)
         phoneOperatorBorder= findViewById(R.id.edit_phone_number_lin)
         timer =findViewById(R.id.timerText)
+        operatorNumbers=findViewById(R.id.operator_numbers)
+        deviceNumbers =findViewById(R.id.device_numbers)
 
         sendBtn =findViewById(R.id.btn_send)
         reportBtn =findViewById(R.id.btn_report)
@@ -106,6 +113,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         })
         sendBtn?.setOnClickListener(this)
         reportBtn?.setOnClickListener(this)
+        operatorNumbers?.setOnClickListener(this)
+        deviceNumbers?.setOnClickListener(this)
 
         //set default device phone number
         devicePhoneNumberEdit?.setText(SaveItem.getItem(this, SaveItem.DEVICE_PHONE, ""))
@@ -243,6 +252,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 statusTv?.text = getString(R.string.digital_disconnect)
                 offSwitche?.value = 1
             }
+            6->{
+                statusTv?.text = getString(R.string.off_by_timer)
+                offSwitche?.value = 1
+            }
         }
     }
 
@@ -285,7 +298,41 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         when(p0){
             sendBtn -> sendParameters()
             reportBtn -> sendCommand("reporte")
+            operatorNumbers->openOperatorDialog()
+            deviceNumbers->openDevicesDialog()
         }
+    }
+
+    private fun openDevicesDialog() {
+        val dialog:DevicesDialog = DevicesDialog(this,object :DevicesDialog.phoneNumbers{
+            override fun phoneNumber(number1: String, number2: String, number3: String) {
+                if((!number1.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number1))
+                    || (!number2.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number2))
+                    || (!number3.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number3))){
+                    MDToast.makeText(applicationContext, getString(R.string.not_valid_phone_number), MDToast.LENGTH_LONG, MDToast.TYPE_ERROR).show()
+                }else{
+                    devicePhoneNumberEdit?.setText(SaveItem.getItem(applicationContext,SaveItem.DEVICE_PHONE,""))
+                }
+
+            }
+        })
+        dialog.show()
+    }
+
+    private fun openOperatorDialog() {
+        val dialog:OperatorsDialog = OperatorsDialog(this,object :OperatorsDialog.phoneNumbers{
+            override fun phoneNumber(number1: String, number2: String, number3: String) {
+                if((!number1.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number1))
+                    || (!number2.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number2))
+                    || (!number3.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number3))){
+                    MDToast.makeText(applicationContext, getString(R.string.not_valid_phone_number), MDToast.LENGTH_LONG, MDToast.TYPE_ERROR).show()
+                }else{
+                    sendSMS(phoneNumberEdit?.text.toString(),"set_users*${number1}*${number2}*${number3}*")
+                }
+
+            }
+        })
+        dialog.show()
     }
 
     private fun sendCommand(cmd: String) {
@@ -302,7 +349,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             sendSMS(devicePhoneNumber, "reporte")
             startTimer()
         }else{
-            showWaringDialog(devicePhoneNumber, "*set*${cmd}*")
+            showWaringDialog(devicePhoneNumber, "*set*${cmd}*${SaveItem.getItem(applicationContext,SaveItem.OPERATOR_TEL_1,"")}")
         }
 
     }

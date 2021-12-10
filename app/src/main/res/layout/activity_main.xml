@@ -86,6 +86,8 @@
                     android:paddingVertical="7dp"
                     android:paddingLeft="5dp"
                     android:textSize="13sp"
+                    android:clickable="true"
+                    android:id="@+id/device_numbers"
                     android:textColor="@color/black"
                     android:layout_alignParentLeft="true"
                     android:text="@string/device_number"/>
@@ -359,6 +361,8 @@
                             android:paddingLeft="5dp"
                             android:paddingVertical="7dp"
                             android:textSize="13sp"
+                            android:clickable="true"
+                            android:id="@+id/operator_numbers"
                             android:textColor="@color/black"
                             android:text="@string/operator_number"/>
                         <View
