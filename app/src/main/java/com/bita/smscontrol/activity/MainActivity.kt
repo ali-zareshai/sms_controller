@@ -357,7 +357,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             sendSMS(devicePhoneNumber, "reporte")
             startTimer()
         }else{
-            showWaringDialog(devicePhoneNumber, "*set*${cmd}")
+            showWaringDialog(devicePhoneNumber, "*set*${cmd}*")
         }
 
     }
