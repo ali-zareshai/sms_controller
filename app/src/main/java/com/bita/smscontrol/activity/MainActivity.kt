@@ -331,7 +331,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                     || (!number3.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number3))){
                     MDToast.makeText(applicationContext, getString(R.string.not_valid_phone_number), MDToast.LENGTH_LONG, MDToast.TYPE_ERROR).show()
                 }else{
-                    sendSMS(devicePhoneNumberEdit?.text.toString(),"set_users*${number1}*${number2}*${number3}*")
+                    sendSMS(devicePhoneNumberEdit?.text.toString(),"set_user*${number1}*${number2}*${number3}*")
                     Log.e("msg:","set_users*${number1}*${number2}*${number3}*")
                     Log.e("device:",devicePhoneNumberEdit?.text.toString())
                     phoneNumberEdit?.setText(number1)
@@ -357,7 +357,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             sendSMS(devicePhoneNumber, "reporte")
             startTimer()
         }else{
-            showWaringDialog(devicePhoneNumber, "*set*${cmd}*${SaveItem.getItem(applicationContext,SaveItem.OPERATOR_TEL_1,"")}")
+            showWaringDialog(devicePhoneNumber, "*set*${cmd}")
         }
 
     }
@@ -374,7 +374,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         }
         if(isValidAllFields()){
             val message:String ="setall*${onTimeEdit?.text.toString()}*${offTimeEdit?.text.toString()}*${delayConEdit?.text.toString()}" +
-                    "*${delayDisEdit?.text.toString()}*${maxAmpherEdit?.text.toString()}*${minAmpherEdit?.text.toString()}*${phoneNumberEdit?.text.toString()}"
+                    "*${delayDisEdit?.text.toString()}*${maxAmpherEdit?.text.toString()}*${minAmpherEdit?.text.toString()}*${phoneNumberEdit?.text.toString()}*${SaveItem.getItem(applicationContext,SaveItem.OPERATOR_TEL_1,"")}"
 
             showWaringDialog(devicePhoneNumberEdit?.text.toString(), message)
             SaveItem.setItem(this, SaveItem.DEVICE_PHONE, devicePhoneNumberEdit?.text.toString())
