@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#E16A6A6A"
+    android:background="#FAB6B6B6"
     android:orientation="vertical" >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layoutDirection="rtl"
         android:layout_gravity="center"
-        android:background="#AE636363"
+        android:background="#EE3061FF"
         android:gravity="center"
         android:orientation="horizontal">
         <TextView
@@ -21,10 +21,6 @@
             android:textStyle="bold"/>
     </LinearLayout>
 
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/radioGroup_device">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,11 +34,10 @@
             android:weightSum="11"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <RadioButton
+            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:tag="1"
-                android:checked="true"
                 android:layout_height="wrap_content"
                 android:id="@+id/device_1"/>
             <EditText
@@ -80,7 +75,7 @@
             android:weightSum="11"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <RadioButton
+            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:tag="2"
@@ -121,7 +116,7 @@
             android:weightSum="11"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <RadioButton
+            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:tag="3"
@@ -155,14 +150,13 @@
                 android:textStyle="bold"/>
         </LinearLayout>
     </LinearLayout>
-    </RadioGroup>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layoutDirection="rtl"
         android:layout_gravity="center"
-        android:background="#AE636363"
+        android:background="#AE9C9C9C"
         android:gravity="center"
         android:orientation="horizontal" >
 

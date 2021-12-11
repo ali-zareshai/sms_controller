@@ -64,6 +64,9 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     var timerHander:Handler?=null
     var enableSwitchs:Boolean=true
 
+    lateinit var deviceDialog:DevicesDialog
+    lateinit var operatorDialog:OperatorsDialog
+
 
     companion object {
         private const val REQUEST_CODE_SMS_PERMISSION = 1
@@ -304,7 +307,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     private fun openDevicesDialog() {
-        val dialog:DevicesDialog = DevicesDialog(this,object :DevicesDialog.phoneNumbers{
+        deviceDialog =DevicesDialog(this,object :DevicesDialog.phoneNumbers{
             override fun phoneNumber(number1: String, number2: String, number3: String) {
                 if((!number1.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number1))
                     || (!number2.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number2))
@@ -312,27 +315,32 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                     MDToast.makeText(applicationContext, getString(R.string.not_valid_phone_number), MDToast.LENGTH_LONG, MDToast.TYPE_ERROR).show()
                 }else{
                     devicePhoneNumberEdit?.setText(SaveItem.getItem(applicationContext,SaveItem.DEVICE_PHONE,""))
+                    deviceDialog.dismiss()
                 }
 
             }
         })
-        dialog.show()
+        deviceDialog.show()
     }
 
     private fun openOperatorDialog() {
-        val dialog:OperatorsDialog = OperatorsDialog(this,object :OperatorsDialog.phoneNumbers{
+        operatorDialog =OperatorsDialog(this,object :OperatorsDialog.phoneNumbers{
             override fun phoneNumber(number1: String, number2: String, number3: String) {
                 if((!number1.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number1))
                     || (!number2.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number2))
                     || (!number3.isEmpty() && !Regex("09[0-9]{9}").containsMatchIn(number3))){
                     MDToast.makeText(applicationContext, getString(R.string.not_valid_phone_number), MDToast.LENGTH_LONG, MDToast.TYPE_ERROR).show()
                 }else{
-                    sendSMS(phoneNumberEdit?.text.toString(),"set_users*${number1}*${number2}*${number3}*")
+                    sendSMS(devicePhoneNumberEdit?.text.toString(),"set_users*${number1}*${number2}*${number3}*")
+                    Log.e("msg:","set_users*${number1}*${number2}*${number3}*")
+                    Log.e("device:",devicePhoneNumberEdit?.text.toString())
+                    phoneNumberEdit?.setText(number1)
+                    operatorDialog.dismiss()
                 }
 
             }
         })
-        dialog.show()
+        operatorDialog.show()
     }
 
     private fun sendCommand(cmd: String) {

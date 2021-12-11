@@ -5,6 +5,7 @@ import android.content.Context
 import android.widget.EditText
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import cn.pedant.SweetAlert.SweetAlertDialog
@@ -22,10 +23,11 @@ class OperatorsDialog(context: Context,val newPhoneNumbers: phoneNumbers) : Dial
     private var telOperator1: EditText? = null
     private var telOperator2: EditText? = null
     private var telOperator3: EditText? = null
-    override fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.dialog_operators)
+        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         yesBtn = findViewById<View>(R.id.btn_yes) as Button
         noBtn = findViewById<View>(R.id.btn_no) as Button
         nameOperator1 = findViewById<View>(R.id.operator_name_1) as EditText

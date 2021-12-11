@@ -22,6 +22,7 @@
     <string name="low_from_15">باید کمتر از 15 باشد</string>
     <string name="are_you_sure">آیا مطمئن هستید؟</string>
     <string name="are_you_send_config">تنظیمات ارسال گردد؟</string>
+    <string name="are_you_save_config">تنظیمات ذخیره گردد؟</string>
     <string name="yes_send">بله و ارسال …</string>
     <string name="no">خیر</string>
     <string name="sending">در حال ارسال …</string>
